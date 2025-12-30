@@ -9,6 +9,7 @@ const SignInPage = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -16,10 +17,10 @@ const SignInPage = () => {
     setIsLoading(true);
     try {
       const res = await axiosInstance.post("/admin/login", { email, password });
-      alert(res.data.message);
+      setMessage(res.data.message);
       navigate("/");
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      setMessage(err.response?.data?.message || "Login failed");
     } finally {
       setIsLoading(false);
     }
@@ -38,7 +39,11 @@ const SignInPage = () => {
             Access patient records, track treatments, and manage appointments effortlessly to provide exceptional care.
           </p>
 
-
+          {message && (
+            <div className="mb-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded">
+              {message}
+            </div>
+          )}
           <form className="space-y-6" onSubmit={handleLogin}>
             {/* Email */}
             <div>
