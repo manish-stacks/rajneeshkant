@@ -99,13 +99,11 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`w-4 h-4 ${
-          i < rating ? "text-yellow-400 fill-current" : "text-gray-300"
-        } ${
-          interactive
+        className={`w-4 h-4 ${i < rating ? "text-yellow-400 fill-current" : "text-gray-300"
+          } ${interactive
             ? "cursor-pointer hover:text-yellow-400 transition-colors"
             : ""
-        }`}
+          }`}
         onClick={() => interactive && onStarClick && onStarClick(i + 1)}
       />
     ));
@@ -167,7 +165,7 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
   };
 
   const NoReviewsSection = () => (
-    <div className="text-center py-12 px-6 bg-gradient-to-br from-blue-50 via-white to-blue-50 rounded-2xl shadow-lg max-w-md mx-auto">
+    <div className="text-center py-12 px-6 max-w-md mx-auto">
       <MessageSquare className="w-20 h-20 text-[#1C6AFF] mx-auto mb-4" />
       <h4 className="text-2xl font-bold text-gray-800 mb-2">No Reviews Yet</h4>
       <p className="text-gray-600 mb-6 text-sm md:text-base">
@@ -321,178 +319,221 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <div className="container mx-auto px-4 py-8">
         {/* Hero Section */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid lg:grid-cols-2 gap-8 mb-12 py-8">
           {/* Left Side - Service Images Carousel */}
-      <ServiceImageCarousel service={service} />
+          <ServiceImageCarousel service={service} />
 
-          {/* Right Side - Service Details */}
-          <div className="space-y-6">
-            <div className="relative">
-              {/* Status Badge */}
+          {/* RIGHT PANEL – SERVICE DETAILS */}
+          <div className="space-y-8">
+
+            {/* STATUS BADGE + TITLE */}
+            <div>
               <Badge
-                variant="secondary"
-                className="inline-flex items-center px-3 py-1 rounded-lg mt-5 mb-4 text-sm font-semibold shadow-sm bg-green-600 text-white animate-pulse"
+                className="inline-flex items-center gap-1 px-4 py-1.5 mb-4 bg-emerald-600 text-white shadow-md rounded-full"
               >
-                <CheckCircle className="w-4 h-4 mr-1 text-white" />
+                <CheckCircle className="w-4 h-4" />
                 {service.service_status}
               </Badge>
 
-              {/* Service Title */}
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-3 leading-tight">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
                 {service.service_name}
               </h1>
 
-              {/* Description */}
-              <p className="text-base md:text-lg text-gray-700 mb-6 max-w-3xl">
+              <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed">
                 {service.service_small_desc}
               </p>
             </div>
 
-            {/* Pricing Card */}
-            <Card className="border-0 shadow-xs bg-gradient-to-r from-blue-50 to-indigo-50">
-              <CardContent className="p-6">
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 shadow-xl border border-blue-100 relative overflow-hidden">
-                  {/* Decorative floating circle */}
-                  <div className="absolute -top-6 -right-6 w-24 h-24 bg-blue-200 opacity-20 rounded-full blur-2xl animate-pulse"></div>
+            {/* PRICING CARD */}
+            <Card className="relative overflow-hidden border border-gray-200 shadow-xl rounded-2xl bg-white">
+              <CardContent className="p-6 space-y-6">
 
-                  {/* Price & Discount */}
-                  <div className="flex items-center justify-between mb-6 bg-white rounded-2xl p-4 shadow-md border border-gray-100">
-                    <div>
-                      <p className="text-sm text-red-400 line-through mb-1">
-                        ₹{service.service_per_session_price.toLocaleString()}{" "}
-                        per session
-                      </p>
-                      <div className="flex items-center gap-3">
-                        <span className="text-3xl font-extrabold text-gradient text-dark-700">
-                          ₹
-                          {service.service_per_session_discount_price.toLocaleString()}
-                        </span>
-                        <Badge
-                          variant="destructive"
-                          className="bg-gradient-to-r from-green-500 to-emerald-400 text-white px-3 py-1 rounded-lg shadow-lg"
-                        >
-                          {service.service_per_session_discount_percentage}% OFF
-                        </Badge>
-                      </div>
-                    </div>
-                    <Tag className="w-10 h-10 text-white bg-green-600 p-2 rounded-lg shadow-md" />
-                  </div>
+                {/* PRICE BLOCK */}
+                <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5">
+                  <div>
+                    <p className="text-sm text-gray-500 line-through">
+                      ₹{service.service_per_session_price.toLocaleString()} / session
+                    </p>
 
-                  {/* Session Selection */}
-                  <div className="mb-6">
-                    <label className="flex items-center gap-2 text-gray-800 font-semibold text-sm md:text-base mb-3">
-                      <Calendar className="w-4 h-4 text-blue-500" />
-                      Select Number of Sessions (Max:{" "}
-                      {service.service_session_allowed_limit})
-                    </label>
-                    <div className="flex gap-3 flex-wrap">
-                      {Array.from(
-                        { length: service.service_session_allowed_limit },
-                        (_, i) => i + 1
-                      ).map((num) => (
-                        <button
-                          key={num}
-                          onClick={() => setSelectedSessions(num)}
-                          className={`min-w-[44px] px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 transform
-          ${
-            selectedSessions === num
-              ? "bg-gradient-to-r from-[#155DFC] to-[#0092B8] text-white shadow-lg scale-105"
-              : "bg-white text-gray-700 border border-gray-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md"
-          }`}
-                        >
-                          {num}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Total Calculation */}
-                  <div className="bg-white rounded-2xl p-5 mb-6 shadow-lg border border-gray-200 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
-                    {/* Decorative floating circle */}
-                    <div className="absolute -top-6 -right-6 w-20 h-20 bg-green-100 opacity-30 rounded-full blur-2xl animate-pulse"></div>
-
-                    {/* Total */}
-                    <div className="flex justify-between items-center mb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-green-100 p-2 rounded-full flex items-center justify-center">
-                          <Calculator className="w-5 h-5 text-green-700" />
-                        </div>
-                        <span className="text-gray-800 font-medium text-sm">
-                          Total ({selectedSessions} session
-                          {selectedSessions > 1 ? "s" : ""})
-                        </span>
-                      </div>
-                      <span className="font-bold text-lg text-gray-900">
-                        ₹
-                        {calculateTotalPrice(selectedSessions).toLocaleString()}
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="text-3xl font-bold text-gray-900">
+                        ₹{service.service_per_session_discount_price.toLocaleString()}
                       </span>
-                    </div>
-
-                    {/* Savings */}
-                    <div className="flex justify-between items-center mt-3">
-                      <div className="flex items-center gap-2">
-                        <div className="bg-green-200 p-2 rounded-full flex items-center justify-center animate-pulse">
-                          <TrendingUp className="w-4 h-4 text-green-800" />
-                        </div>
-                        <span className="font-semibold text-green-700 text-sm">
-                          You save
-                        </span>
-                      </div>
-                      <span className="font-bold text-green-800 text-lg">
-                        ₹{calculateSavings(selectedSessions).toLocaleString()}
+                      <span className="bg-green-500 text-white text-xs px-3 py-1 rounded-full">
+                        {service.service_per_session_discount_percentage}% OFF
                       </span>
                     </div>
                   </div>
 
-                  <Button
-                    size="lg"
-                    className="w-full  bg-gradient-to-r from-[#155DFC] to-[#0092B8] 
-                                    mt-4 border-2 border-[#155DFC]  text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                  >
-                    <Calendar className="w-5 h-5 mr-2" />
-                    <Link
-                      href={`/booking-sessions?sessions=${selectedSessions}&price=${calculateTotalPrice(
-                        selectedSessions
-                      )
-                        .toLocaleString()
-                        .replace(/[^\d.]/g, "")}&service=${slug}`}
-                    >
-                      Book Appointment Now
-                    </Link>
-                  </Button>
+                  <div className="bg-blue-600 p-3 rounded-xl shadow-md">
+                    <Tag className="text-white w-6 h-6" />
+                  </div>
                 </div>
-                <div className="flex justify-center items-center gap-3 mt-6 text-sm">
-                  {/* Instant Confirmation */}
-                  <div className="flex items-center gap-1 bg-green-100/80 text-green-700 px-3 py-1 rounded-lg shadow-sm hover:scale-105 transition-transform duration-200">
-                    <ShieldCheck className="w-4 h-4" />
-                    <span className="font-medium text-xs">
-                      Instant Confirmation
+
+                {/* SESSION SELECTOR */}
+                <div>
+                  <p className="font-medium text-gray-800 mb-3">
+                    Select number of sessions
+                  </p>
+
+                  <div className="flex flex-wrap gap-3">
+                    {Array.from(
+                      { length: service.service_session_allowed_limit },
+                      (_, i) => i + 1
+                    ).map((num) => (
+                      <button
+                        key={num}
+                        onClick={() => setSelectedSessions(num)}
+                        className={`px-5 py-2 rounded-lg text-sm font-medium transition-all
+                ${selectedSessions === num
+                            ? "bg-blue-600 text-white shadow-lg scale-105"
+                            : "bg-gray-100 hover:bg-blue-50 text-gray-700"
+                          }`}
+                      >
+                        {num}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* TOTAL & SAVINGS */}
+                <div className="bg-gray-50 rounded-xl px-5 py-2 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-700 font-medium">
+                      Total ({selectedSessions} session{selectedSessions > 1 && "s"})
+                    </span>
+                    <span className="text-xl font-bold text-gray-900">
+                      ₹{calculateTotalPrice(selectedSessions).toLocaleString()}
                     </span>
                   </div>
 
-                  {/* Secure Payment */}
-                  <div className="flex items-center gap-1 bg-blue-100/80 text-blue-700 px-3 py-1 rounded-lg shadow-sm hover:scale-105 transition-transform duration-200">
-                    <Lock className="w-4 h-4" />
-                    <span className="font-medium text-xs">Secure Payment</span>
-                  </div>
-
-                  {/* Money Back Guarantee */}
-                  <div className="flex items-center gap-1 bg-yellow-100/80 text-yellow-700 px-3 py-1 rounded-lg shadow-sm hover:scale-105 transition-transform duration-200">
-                    <RotateCcw className="w-4 h-4" />
-                    <span className="font-medium text-xs">
-                      Money Back Guarantee
-                    </span>
+                  <div className="flex items-center justify-between text-green-700 text-sm font-medium">
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4" />
+                      You Save
+                    </div>
+                    <span>₹{calculateSavings(selectedSessions).toLocaleString()}</span>
                   </div>
                 </div>
+
+
+
+                {/* CTA */}
+                <a
+                  href={`/booking-sessions?sessions=${selectedSessions}&price=${calculateTotalPrice(selectedSessions).toLocaleString().replace(/[^\d.]/g, "")}&service=${slug}`}
+                  className="w-full inline-flex justify-center items-center gap-2 bg-gradient-to-r from-[#155DFC] to-[#0092B8] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-white px-5 py-2.5 text-center shadow-lg hover:shadow-2xl transition-all duration-300"
+                >
+                  <Calendar className="w-5 h-5 mr-2" />
+                  Book Appointment
+                </a>
+
+
               </CardContent>
             </Card>
           </div>
+
         </div>
 
+
+
+        {/* Service Description */}
+        <Card className="mb-12 py-0 border border-blue-100 shadow-xl rounded-xl overflow-hidden">
+          {/* Header */}
+          <CardHeader className="bg-gradient-to-r from-[#155DFC] to-blue-500 px-6 py-4 text-white">
+            <CardTitle className="text-xl font-extrabold md:text-2xl">
+              About This Treatment
+            </CardTitle>
+          </CardHeader>
+
+          {/* Content */}
+          <CardContent className="p-4 md:p-8 bg-white">
+            {/* Description */}
+            <div className="mb-6">
+              <div
+                className="text-gray-700 text-base leading-relaxed break-words whitespace-normal w-full"
+                dangerouslySetInnerHTML={{ __html: service.service_desc }}
+              />
+            </div>
+
+            {/* Highlights */}
+            <div className="mt-8 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 p-6 shadow-md">
+
+              <h4 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-6">
+                <CheckCircle className="w-6 h-6 text-blue-600" />
+                Treatment Highlights
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+                {/* Sessions */}
+                <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition">
+                  <div className="p-3 bg-blue-100 rounded-full">
+                    <Clock className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">
+                      Sessions Allowed
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Up to {service.service_session_allowed_limit} sessions
+                    </p>
+                  </div>
+                </div>
+
+                {/* Discount */}
+                <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition">
+                  <div className="p-3 bg-green-100 rounded-full">
+                    <IndianRupee className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">
+                      Discount Available
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Save up to {service.service_per_session_discount_percentage}%
+                    </p>
+                  </div>
+                </div>
+
+                {/* Doctor */}
+                <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition">
+                  <div className="p-3 bg-purple-100 rounded-full">
+                    <Award className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">
+                      Treated By Expert
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Dr. {service.service_doctor.doctor_name}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Reviews */}
+                <div className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition">
+                  <div className="p-3 bg-teal-100 rounded-full">
+                    <Users className="w-5 h-5 text-teal-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">
+                      Patient Satisfaction
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {service.service_reviews.length}+ Happy Patients
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </CardContent>
+        </Card>
         <div className="w-full lg:flex items-start gap-6 justify-between space-y-6 lg:space-y-0">
           {/* Doctor Section */}
           <Card className="lg:w-[32%] py-0 mb-5 border-0 shadow-sm bg-gradient-to-br from-blue-50 via-white to-indigo-50 overflow-hidden relative group hover:shadow-2xl transition-all duration-500">
-            <CardHeader className="bg-gradient-to-r from-[#1B68FF] to-blue-600 p-5 relative overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-[#1B68FF] to-blue-600 py-2 px-6 relative overflow-hidden">
               <div className="absolute inset-0 bg-white opacity-10 transform -skew-y-3"></div>
               <CardTitle className="text-xl md:text-2xl flex items-center gap-3 relative z-10 text-white">
                 <div className="p-2 mt-2 bg-white bg-opacity-20 rounded-lg">
@@ -502,7 +543,7 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
               </CardTitle>
             </CardHeader>
 
-            <CardContent className="p-5 md:p-7 relative bg-gradient-to-b from-white to-blue-50 rounded-2xl shadow-lg border border-blue-100">
+            <CardContent className="p-5 md:p-7 relative bg-gradient-to-b from-white to-blue-50 rounded-b-2xl shadow-lg border border-blue-100">
               {/* Doctor Profile */}
               <div className="text-center mb-6">
                 <div className="relative inline-block">
@@ -523,7 +564,7 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
                   </Avatar>
 
                   {/* Active Status Indicator */}
-                  <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center shadow-md">
+                  <div className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center shadow-md">
                     <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
                   </div>
                 </div>
@@ -531,7 +572,20 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
                 <h3 className="text-xl font-bold text-gray-900 mt-4">
                   Dr. {service.service_doctor.doctor_name}
                 </h3>
-
+                <p className="py-4">
+                  {service.service_doctor.specialization.map((spec, index) => {
+                    // Clean unwanted quotes/brackets
+                    const cleanedSpec = spec.replace(/['"\[\]\n]/g, "").trim();
+                    return (
+                      <Badge
+                        key={index}
+                        className="bg-gradient-to-r from-blue-400 to-blue-500 text-white px-4 py-1 rounded-lg shadow-md text-xs md:text-sm font-medium hover:scale-105 transition-transform duration-200"
+                      >
+                        {cleanedSpec}
+                      </Badge>
+                    );
+                  })}
+                </p>
                 {/* Ratings */}
                 <div className="flex items-center justify-center gap-2 mb-3">
                   <div className="flex items-center gap-1 text-yellow-400">
@@ -547,11 +601,10 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
                 {/* Status */}
                 <div className="flex justify-center mt-3">
                   <Badge
-                    className={`px-4 py-1 text-xs font-semibold rounded-lg shadow-md flex items-center gap-1 transition-all duration-300 ${
-                      service.service_doctor.doctor_status === "Booking takes"
-                        ? "bg-gradient-to-r from-green-400 to-green-500 text-white"
-                        : "bg-gray-200 text-gray-800"
-                    }`}
+                    className={`px-4 py-1 text-xs font-semibold rounded-lg shadow-md flex items-center gap-1 transition-all duration-300 ${service.service_doctor.doctor_status === "Booking takes"
+                      ? "bg-gradient-to-r from-green-400 to-green-500 text-white"
+                      : "bg-gray-200 text-gray-800"
+                      }`}
                   >
                     <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
                     {service.service_doctor.doctor_status}
@@ -560,7 +613,7 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
               </div>
 
               {/* Specializations */}
-              <div className="mb-5">
+              <div className="mb-5 hidden">
                 <h4 className="font-bold text-gray-900 mb-3 text-sm md:text-base flex items-center gap-2">
                   <div className="w-2 h-2 bg-[#1B68FF] rounded-lg"></div>
                   <span className="text-dark">Specializations</span>
@@ -582,7 +635,7 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
               </div>
 
               {/* Languages */}
-              <div>
+              <div className="hidden">
                 <h4 className="font-bold text-gray-900 mb-3 text-sm md:text-base flex items-center gap-2">
                   <div className="w-2 h-2 bg-[#1B68FF] rounded-lg"></div>
                   <span className="text-gray-900">Languages</span>
@@ -611,7 +664,7 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
 
           {/* Reviews Section */}
           <Card className="lg:w-[66%] py-0 border-0 shadow-sm bg-gradient-to-br from-green-50 via-white to-teal-50 overflow-hidden relative">
-            <CardHeader className="bg-gradient-to-r from-[#1C6AFF] to-[#3A86FF] text-white relative overflow-hidden p-5">
+            <CardHeader className="bg-gradient-to-r from-[#1C6AFF] to-[#3A86FF] text-white relative overflow-hidden  py-2 px-6">
               <div className="absolute inset-0 bg-white opacity-10 transform skew-y-3"></div>
               <CardTitle className="text-lg md:text-2xl flex items-center gap-3 relative z-10">
                 <div className="p-2 mt-2 bg-white bg-opacity-20 rounded-full">
@@ -635,73 +688,8 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
             </CardContent>
           </Card>
         </div>
-
-        {/* Service Description */}
-        <Card className="mb-12 py-0 border border-blue-100 shadow-xl rounded-xl overflow-hidden">
-          {/* Header */}
-          <CardHeader className="bg-gradient-to-r from-[#155DFC] to-blue-500 py-4 text-white">
-            <CardTitle className="text-xl font-extrabold md:text-2xl">
-              About This Treatment
-            </CardTitle>
-          </CardHeader>
-
-          {/* Content */}
-          <CardContent className="p-4 md:p-8 bg-white">
-            {/* Description */}
-            <div className="mb-6">
-              <div
-                className="text-gray-700 text-base leading-relaxed break-words whitespace-normal w-full"
-                dangerouslySetInnerHTML={{ __html: service.service_desc }}
-              />
-            </div>
-
-            {/* Highlights */}
-            <div className="mt-8 p-5 md:p-6 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl shadow-md">
-              <h4 className="font-bold text-gray-900 mb-6 flex items-center gap-2 text-base md:text-lg">
-                <CheckCircle className="w-6 h-6 text-[#155DFC]" />
-                Treatment Highlights
-              </h4>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Sessions */}
-                <div className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-blue-400 to-blue-500 text-white shadow-lg hover:scale-105 transition-transform duration-200">
-                  <Clock className="w-5 h-5 text-white" />
-                  <span className="text-sm font-medium">
-                    Max {service.service_session_allowed_limit} sessions allowed
-                  </span>
-                </div>
-
-                {/* Discount */}
-                <div className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-green-400 to-green-500 text-white shadow-lg hover:scale-105 transition-transform duration-200">
-                  <IndianRupee className="w-5 h-5 text-white" />
-                  <span className="text-sm font-medium">
-                    {service.service_per_session_discount_percentage}% discount
-                    available
-                  </span>
-                </div>
-
-                {/* Doctor */}
-                <div className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-purple-400 to-pink-400 text-white shadow-lg hover:scale-105 transition-transform duration-200">
-                  <Award className="w-5 h-5 text-white" />
-                  <span className="text-sm font-medium">
-                    Expert care by {service.service_doctor.doctor_name}
-                  </span>
-                </div>
-
-                {/* Reviews */}
-                <div className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-teal-400 to-cyan-500 text-white shadow-lg hover:scale-105 transition-transform duration-200">
-                  <Users className="w-5 h-5 text-white" />
-                  <span className="text-sm font-medium">
-                    {service.service_reviews.length}+ satisfied patients
-                  </span>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Hurry Up Section */}
-        <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-50 via-white to-blue-100 overflow-hidden relative group hover:shadow-3xl transition-all duration-500">
+        <Card className="hidden border-0 shadow-sm bg-gradient-to-br from-blue-50 via-white to-blue-100 overflow-hidden relative group hover:shadow-3xl transition-all duration-500">
           <CardContent className="p-8 relative z-10">
             <div className="text-center">
               {/* Floating discount badge */}

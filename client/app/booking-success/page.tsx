@@ -374,7 +374,7 @@ const BookingSuccessContent: React.FC = () => {
                   Dr. Rajneesh Kant
                 </h1>
                 <p className="text-sm text-gray-700 font-medium">
-                  Physiotherapy & Chiropractic Care
+                  Physiotherapist | Osteopath | Chiropractor
                 </p>
                 <div className="mt-1 text-xs text-gray-600">
                   <p>

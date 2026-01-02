@@ -43,11 +43,17 @@ const ChiropracticClinic = () => {
         "from-amber-500 to-yellow-500"
     ];
 
-    const treatmentConditions = dbServices?.reverse().map((service, index) => ({
-        name: service.service_name,
-        icon: icons[index % icons.length],
-        color: colors[index % colors.length]
-    }));
+    const treatmentConditions = dbServices
+        ?.reverse()
+        .map((service, index) => ({
+            slug: service.service_slug,
+            position: service.position,
+            name: service.service_name,
+            icon: icons[index % icons.length],
+            color: colors[index % colors.length],
+            service_desc: service.service_desc
+        }))
+        .sort((a, b) => a.position - b.position);
 
     const stats = [
         { icon: <Users className="w-6 h-6" />, number: "50,000+", label: "Happy Patients" },
@@ -56,7 +62,7 @@ const ChiropracticClinic = () => {
         { icon: <CheckCircle className="w-6 h-6" />, number: "98%", label: "Success Rate" }
     ];
 
-    
+
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] via-[#F0F9FF] to-[#ECFDF5] overflow-hidden">
@@ -175,7 +181,7 @@ const ChiropracticClinic = () => {
                     </div>
 
                     {/* Cards */}
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {treatmentConditions.map((condition, index) => {
                             const lightBgColors = [
                                 "bg-blue-50",
@@ -188,7 +194,7 @@ const ChiropracticClinic = () => {
                             return (
                                 <Link
                                     key={index}
-                                    href={`/treatments/${condition?.name.toLowerCase().replace(/\s+/g, "-")}`}
+                                    href={`/treatments/${condition?.slug}`}
                                     className={`group relative rounded-2xl p-6 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 border border-transparent ${lightBgColors[index % lightBgColors.length]}`}
                                 >
                                     {/* Icon Container */}
@@ -199,12 +205,18 @@ const ChiropracticClinic = () => {
                                     </div>
 
                                     {/* Condition Name */}
-                                    <h4 className="font-semibold text-gray-900 mb-3 text-center text-sm md:text-base group-hover:text-[#155DFC] transition-colors duration-300">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition">
                                         {condition.name}
-                                    </h4>
+                                    </h3>
+                                    <p
+                                        className="text-sm text-gray-600 leading-relaxed line-clamp-5"
+                                        dangerouslySetInnerHTML={{ __html: condition.service_desc || "" }}
+                                    />
 
-                                    {/* Book Button */}
-                                    <div className="flex justify-center">
+                                    <div className="my-4 h-px bg-gray-200" />
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-500">View Details</span>
+
                                         <Button
                                             size={"sm"}
                                             variant={"outline"}
@@ -213,6 +225,8 @@ const ChiropracticClinic = () => {
                                             Book Now
                                         </Button>
                                     </div>
+
+
 
                                     {/* Glow Effect on Hover */}
                                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#155DFC]/20 via-[#009689]/20 to-[#0092B8]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>

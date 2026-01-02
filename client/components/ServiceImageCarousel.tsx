@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight } from "lucide-react"; // <-- icons
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type ServiceImage = {
   _id: string;
@@ -22,78 +21,67 @@ export default function ServiceImageCarousel({
 }: ServiceImageCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  return (
-    <div className="space-y-6 mt-5">
-      {/* Main Image */}
-      <div className="relative w-full max-w-4xl mx-auto">
-        <Card className="border-0 shadow-lg rounded-2xl overflow-hidden">
-          <CardContent className="p-0 aspect-[16/12] relative bg-gray-50">
-            <Image
-              src={
-                service.service_images[activeIndex]?.url ||
-                "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=600&fit=crop"
-              }
-              alt={`${service.service_name} - Image ${activeIndex + 1}`}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-contain rounded-lg transition-transform duration-500 hover:scale-[1.02]"
-            />
-          </CardContent>
-        </Card>
+  const total = service.service_images.length;
 
-        {/* Arrows */}
+  const prevSlide = () =>
+    setActiveIndex((prev) => (prev - 1 + total) % total);
+
+  const nextSlide = () =>
+    setActiveIndex((prev) => (prev + 1) % total);
+
+  return (
+    <div className="w-full max-w-6xl mx-auto space-y-8 ">
+      {/* MAIN IMAGE */}
+      <div className="relative overflow-hidden rounded-3xl bg-white shadow-xl">
+        <div className="relative aspect-[16/10]">
+          <Image
+            src={
+              service.service_images[activeIndex]?.url ||
+              "https://images.unsplash.com/photo-1559757148-5c350d0d3c56"
+            }
+            alt={service.service_name}
+            fill
+            priority
+            className="object-cover transition-transform duration-700 ease-in-out hover:scale-105"
+          />
+        </div>
+
+        {/* Left Arrow */}
         <button
-          className="absolute top-1/2 -translate-y-1/2 left-4 bg-white/80 backdrop-blur-md rounded-full p-2 shadow-md hover:bg-white hover:scale-110 transition"
-          onClick={() =>
-            setActiveIndex(
-              (prev) =>
-                (prev - 1 + service.service_images.length) %
-                service.service_images.length
-            )
-          }
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full p-3 transition"
         >
-          <ChevronLeft className="w-6 h-6 text-blue-600" />
+          <ChevronLeft className="w-6 h-6 text-gray-800" />
         </button>
+
+        {/* Right Arrow */}
         <button
-          className="absolute top-1/2 -translate-y-1/2 right-4 bg-white/80 backdrop-blur-md rounded-full p-2 shadow-md hover:bg-white hover:scale-110 transition"
-          onClick={() =>
-            setActiveIndex((prev) => (prev + 1) % service.service_images.length)
-          }
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full p-3 transition"
         >
-          <ChevronRight className="w-6 h-6 text-blue-600" />
+          <ChevronRight className="w-6 h-6 text-gray-800" />
         </button>
       </div>
 
-      {/* Thumbnails */}
-      <div className="flex justify-center gap-4 flex-wrap mt-10">
-        {service.service_images.map((image, index) => (
+      {/* THUMBNAILS */}
+      <div className="flex justify-center gap-4 flex-wrap">
+        {service.service_images.map((img, index) => (
           <button
-            key={image._id}
+            key={img._id}
             onClick={() => setActiveIndex(index)}
-            className={`relative w-28 h-24 rounded-lg overflow-hidden border-2 transition-all duration-300
-        ${
-          activeIndex === index
-            ? "border-blue-600 shadow-2xl scale-110 ring-4 ring-blue-200"
-            : "border-gray-200 hover:border-blue-400 hover:scale-105"
-        } bg-white/70 backdrop-blur-md`}
-          >
-            {/* Thumbnail Image */}
-            <Image
-              src={
-                image.url ||
-                "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop"
+            className={`relative w-24 h-20 rounded-xl overflow-hidden transition-all duration-300
+              ${
+                index === activeIndex
+                  ? "ring-4 ring-blue-500 scale-110 shadow-xl"
+                  : "ring-1 ring-gray-300 hover:ring-blue-300"
               }
+            `}
+          >
+            <Image
+              src={img.url}
               alt={`Thumbnail ${index + 1}`}
               fill
-              className="object-cover rounded-lg transition-transform duration-500 hover:scale-105"
-            />
-
-            {/* Overlay Effect on Hover */}
-            <div
-              className={`absolute inset-0 bg-gradient-to-t from-black/30 to-transparent transition-opacity duration-300
-          ${
-            activeIndex === index ? "opacity-50" : "opacity-0 hover:opacity-40"
-          }`}
+              className="object-cover"
             />
           </button>
         ))}

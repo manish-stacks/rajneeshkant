@@ -12,6 +12,15 @@ function slugToTitle(slug) {
         .join(" ");
 }
 
+function slugify(str) {
+    return str
+        .toLowerCase()           
+        .trim()                  
+        .replace(/[^\w\s-]/g, '') 
+        .replace(/[\s_-]+/g, '-') 
+        .replace(/^-+|-+$/g, ''); 
+}
+
 
 // Create Service
 exports.createService = async (req, res) => {
@@ -24,6 +33,7 @@ exports.createService = async (req, res) => {
             service_small_desc,
             service_desc,
             service_status,
+            appointment_status,
             service_session_allowed_limit,
             service_per_session_price,
             service_per_session_discount_price,
@@ -48,9 +58,11 @@ exports.createService = async (req, res) => {
         // Create service object
         const serviceData = {
             service_name,
+            service_slug: slugify(service_name),
             service_small_desc,
             service_desc,
             service_status,
+            appointment_status,
             service_session_allowed_limit,
             service_per_session_price,
             service_per_session_discount_price,
@@ -290,21 +302,20 @@ exports.getServiceBySlug = async (req, res) => {
 
     try {
         const { slug } = req.params;
-        const serviceName = slugToTitle(slug);
-        const cacheKey = `service:${serviceName}`;
+        const cacheKey = `service:${slug}`;   // ✅ FIX
 
-        // 1. Try Redis cache
+        console.log(`Fetching service with slug: ${slug}`);
+
+        // 🔹 Check Redis cache first
         const cachedData = await redisClient.get(cacheKey);
         if (cachedData) {
             return res.status(200).json(JSON.parse(cachedData));
         }
 
-        // 2. Fetch service without clinic data
-        let service = await Service.findOne({ service_name: serviceName })
+        let service = await Service.findOne({ service_slug: slug })
             .select('-service_available_at_clinics')
             .populate('service_doctor');
 
-        // ❗ 3. Null check before populating reviews
         if (!service) {
             return res.status(404).json({
                 success: false,
@@ -312,23 +323,18 @@ exports.getServiceBySlug = async (req, res) => {
             });
         }
 
-
-        if (
-            Array.isArray(service.service_reviews) &&
-            service.service_reviews.length > 0
-        ) {
-
+        // Populate reviews
+        if (Array.isArray(service.service_reviews) && service.service_reviews.length > 0) {
             await service.populate({
                 path: 'service_reviews',
                 populate: { path: 'reviewer_id' }
             });
 
-
+            // Filter only published reviews
             service.service_reviews = service.service_reviews.filter(
                 review => review.review_status === 'Published'
             );
         }
-
 
         const responseData = {
             success: true,
@@ -336,7 +342,7 @@ exports.getServiceBySlug = async (req, res) => {
             data: service
         };
 
-        // 6. Cache for 5 minutes
+        // ✅ Save to Redis (5 minutes)
         await redisClient.set(cacheKey, JSON.stringify(responseData), 'EX', 300);
 
         return res.status(200).json(responseData);
@@ -350,6 +356,7 @@ exports.getServiceBySlug = async (req, res) => {
         });
     }
 };
+
 
 // Update Service
 exports.updateService = async (req, res) => {
@@ -382,6 +389,7 @@ exports.updateService = async (req, res) => {
             service_small_desc,
             service_desc,
             service_status,
+            appointment_status,
             service_session_allowed_limit,
             service_per_session_price,
             service_per_session_discount_price,
@@ -416,9 +424,11 @@ exports.updateService = async (req, res) => {
         // Update service
         const updateData = {
             service_name,
+            service_slug: slugify(service_name),
             service_small_desc,
             service_desc,
             service_status,
+            appointment_status,
             service_session_allowed_limit,
             service_per_session_price,
             service_per_session_discount_price,

@@ -19,6 +19,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Upload, X, Loader2, Save, ArrowLeft, Star } from 'lucide-react'
 
 const validStatuses = ["Booking Open", "Booking Close", "Draft", "Published"]
+const appointmentShowStatuses = ["Show", "Hide"]
 
 const AddNewTreatMents = () => {
   const [searchParams] = useSearchParams()
@@ -35,6 +36,7 @@ const AddNewTreatMents = () => {
     service_small_desc: "",
     service_desc: "",
     service_status: "Draft",
+    appointment_status: "Hide",
     service_session_allowed_limit: 3,
     service_per_session_price: 12000,
     service_per_session_discount_price: 10000,
@@ -141,6 +143,7 @@ const AddNewTreatMents = () => {
         service_small_desc: service.service_small_desc || "",
         service_desc: service.service_desc || "",
         service_status: service.service_status || "Draft",
+        appointment_status: service.appointment_status || "Hide",
         service_session_allowed_limit: service.service_session_allowed_limit || 1,
         service_per_session_price: service.service_per_session_price || 0,
         service_per_session_discount_price: service.service_per_session_discount_price || 0,
@@ -263,13 +266,14 @@ const AddNewTreatMents = () => {
       } else {
         await axios.post(`${API_URL}/create-service`, form)
         toast.success("Treatment created successfully!")
-        
+
         // Reset form
         setFormData({
           service_name: "",
           service_small_desc: "",
           service_desc: "",
           service_status: "Draft",
+          appointment_status: "Hide",
           service_session_allowed_limit: 1,
           service_per_session_price: 12000,
           service_per_session_discount_price: 10000,
@@ -305,28 +309,28 @@ const AddNewTreatMents = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-    <div className="mb-8 p-6 rounded-lg bg-gradient-to-r from-blue-800 to-sky-700 text-white shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-    <div>
-      <h1 className="text-3xl font-bold">
-        {isEdit ? "Edit Treatment" : "Create New Treatment"}
-      </h1>
-      <p className="mt-2 text-white/80">
-        {isEdit
-          ? "Update the treatment details below"
-          : "Fill in the details to create a new treatment service"}
-      </p>
-    </div>
+        <div className="mb-8 p-6 rounded-lg bg-gradient-to-r from-blue-800 to-sky-700 text-white shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold">
+              {isEdit ? "Edit Treatment" : "Create New Treatment"}
+            </h1>
+            <p className="mt-2 text-white/80">
+              {isEdit
+                ? "Update the treatment details below"
+                : "Fill in the details to create a new treatment service"}
+            </p>
+          </div>
 
-    <div className="flex items-center gap-4">
-      <Link
-        to={'/dashboard/treatments'}
-        className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg shadow hover:bg-gray-900 transition"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back
-      </Link>
-    </div>
-    </div>
+          <div className="flex items-center gap-4">
+            <Link
+              to={'/dashboard/treatments'}
+              className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg shadow hover:bg-gray-900 transition"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </Link>
+          </div>
+        </div>
 
 
 
@@ -334,7 +338,7 @@ const AddNewTreatMents = () => {
         <div className="space-y-8">
           {/* Basic Information */}
           <Card>
-           <CardHeader className="pb-2">
+            <CardHeader className="pb-2">
               <CardTitle className="text-xl md:text-1xl font-bold text-gray-800 border-b border-gray-300 pb-2">
                 Basic Information
               </CardTitle>
@@ -391,7 +395,7 @@ const AddNewTreatMents = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="service_status" className="font-semibold text-gray-800">
                     Status
@@ -405,6 +409,32 @@ const AddNewTreatMents = () => {
                     </SelectTrigger>
                     <SelectContent className="bg-white rounded-md shadow-md border border-gray-200">
                       {validStatuses.map((status) => (
+                        <SelectItem
+                          key={status}
+                          value={status}
+                          className="text-gray-700 hover:bg-blue-50 rounded-md px-2 py-1"
+                        >
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+
+                <div className="space-y-2">
+                  <Label htmlFor="appointment_status" className="font-semibold text-gray-800">
+                    Appointment Show Status
+                  </Label>
+                  <Select
+                    value={formData.appointment_status}
+                    onValueChange={(value) => handleInputChange("appointment_status", value)}
+                  >
+                    <SelectTrigger className="w-50 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-500">
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white rounded-md shadow-md border border-gray-200">
+                      {appointmentShowStatuses.map((status) => (
                         <SelectItem
                           key={status}
                           value={status}
@@ -436,8 +466,8 @@ const AddNewTreatMents = () => {
           <Card>
             <CardHeader>
             </CardHeader>
-            
-             <CardHeader className="pb-2">
+
+            <CardHeader className="pb-2">
               <CardTitle className="text-xl md:text-1xl font-bold text-gray-800 border-b border-gray-300 pb-2">
                 Pricing & Sessions
               </CardTitle>
@@ -501,12 +531,12 @@ const AddNewTreatMents = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Doctor Selection */}
             <Card>
-             
-               <CardHeader className="pb-2">
-              <CardTitle className="text-xl md:text-1xl font-bold text-gray-800 border-b border-gray-300 pb-2">
-                Assign Doctor
-              </CardTitle>
-            </CardHeader>
+
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl md:text-1xl font-bold text-gray-800 border-b border-gray-300 pb-2">
+                  Assign Doctor
+                </CardTitle>
+              </CardHeader>
               <CardContent className="space-y-4">
                 {doctorsLoading ? (
                   <div className="flex items-center gap-2">
@@ -562,7 +592,7 @@ const AddNewTreatMents = () => {
                           <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                           <span className="text-sm font-medium text-gray-700">{selectedDoctor.doctor_ratings}</span>
                         </div>
-                       <span className="inline-block mt-1 px-2 py-0.5 text-xs font-semibold text-white bg-green-500 rounded">
+                        <span className="inline-block mt-1 px-2 py-0.5 text-xs font-semibold text-white bg-green-500 rounded">
                           Active Doctor
                         </span>
 
@@ -575,61 +605,61 @@ const AddNewTreatMents = () => {
 
             {/* Clinic Selection */}
             <Card>
-               <CardHeader className="pb-2">
-              <CardTitle className="text-xl md:text-1xl font-bold text-gray-800 border-b border-gray-300 pb-2">
-                Available Clinics
-              </CardTitle>
-            </CardHeader>
-             <CardContent>
-  {clinicsLoading ? (
-    <div className="flex items-center gap-2">
-      <Loader2 className="h-4 w-4 animate-spin" />
-      <span className="text-sm text-gray-600">Loading clinics...</span>
-    </div>
-  ) : (
-    <div className="space-y-3">
-      {clinics?.map((clinic) => (
-        <div
-          key={clinic._id}
-          className="flex items-start space-x-3 p-3 bg-gradient-to-r from-blue-50 to-sky-100 border border-blue-200 rounded-lg shadow-sm hover:shadow-md transition"
-        >
-          <Checkbox
-            id={clinic._id}
-            checked={formData.service_available_at_clinics.includes(clinic._id)}
-            onCheckedChange={() => handleClinicToggle(clinic._id)}
-            className="mt-1"
-          />
-          <div className="flex-1">
-            <label htmlFor={clinic._id} className="font-medium cursor-pointer text-gray-800">
-              {clinic.clinic_name}
-            </label>
-            <div className="flex items-center gap-2 mt-1">
-             <Badge className="text-white bg-green-500 text-xs px-2 py-0.5 rounded">
-              {clinic.clinic_stauts}
-            </Badge>
- 
-              {clinic.clinic_ratings && (
-                <div className="flex items-center gap-1">
-                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                  <span className="text-xs text-gray-600">{clinic.clinic_ratings}</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  )}
-</CardContent>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl md:text-1xl font-bold text-gray-800 border-b border-gray-300 pb-2">
+                  Available Clinics
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {clinicsLoading ? (
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-sm text-gray-600">Loading clinics...</span>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {clinics?.map((clinic) => (
+                      <div
+                        key={clinic._id}
+                        className="flex items-start space-x-3 p-3 bg-gradient-to-r from-blue-50 to-sky-100 border border-blue-200 rounded-lg shadow-sm hover:shadow-md transition"
+                      >
+                        <Checkbox
+                          id={clinic._id}
+                          checked={formData.service_available_at_clinics.includes(clinic._id)}
+                          onCheckedChange={() => handleClinicToggle(clinic._id)}
+                          className="mt-1"
+                        />
+                        <div className="flex-1">
+                          <label htmlFor={clinic._id} className="font-medium cursor-pointer text-gray-800">
+                            {clinic.clinic_name}
+                          </label>
+                          <div className="flex items-center gap-2 mt-1">
+                            <Badge className="text-white bg-green-500 text-xs px-2 py-0.5 rounded">
+                              {clinic.clinic_stauts}
+                            </Badge>
+
+                            {clinic.clinic_ratings && (
+                              <div className="flex items-center gap-1">
+                                <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                                <span className="text-xs text-gray-600">{clinic.clinic_ratings}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
 
             </Card>
           </div>
 
           {/* Images */}
           <Card>
-             <CardHeader className="pb-2">
+            <CardHeader className="pb-2">
               <CardTitle className="text-xl md:text-1xl font-bold text-gray-800 border-b border-gray-300 pb-2">
-               Service Images
+                Service Images
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -672,7 +702,7 @@ const AddNewTreatMents = () => {
           </Card>
 
           {/* Submit Button */}
-         <div className="flex justify-end gap-4 mt-4">
+          <div className="flex justify-end gap-4 mt-4">
             {/* Cancel Button */}
             <Button
               variant="outline"

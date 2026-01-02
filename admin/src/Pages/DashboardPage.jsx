@@ -88,7 +88,7 @@ const DashboardPage = () => {
           </div>
           <div>
             <h1 className="text-lg font-bold text-white">{ADMIN_WEB_NAME}</h1>
-            <p className="text-xs text-white/80 whitespace-nowrap">Physiotherapy & Chiropractic Care</p>
+            <p className="text-xs text-white/80 whitespace-nowrap">Physiotherapist | Osteopath | Chiropractor</p>
           </div>
         </div>
 

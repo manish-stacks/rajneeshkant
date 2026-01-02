@@ -278,7 +278,7 @@ const Hero = () => {
                     Dr. Rajneesh Kant
                   </h3>
                   <p className="text-gray-700 font-semibold mb-4">
-                    Master Chiropractor & Spine Specialist
+                   Physiotherapist | Osteopath | Chiropractor
                   </p>
 
                   {/* Rating */}
@@ -293,7 +293,7 @@ const Hero = () => {
 
                   {/* Short Bio */}
                   <p className="text-gray-600 text-sm mb-8 leading-relaxed px-4">
-                    Advanced Sports Injury & Spine Rehabilitation Expert with cutting-edge treatment methodologies
+                    Senior Consultant – Spine, Joint & Neuromuscular Rehabilitation
                   </p>
 
                   {/* Quick Stats */}

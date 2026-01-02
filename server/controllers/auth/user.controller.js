@@ -526,7 +526,7 @@ exports.verifyEmailOtp = async (req, res, next) => {
                                         </h1>
                                         
                                         <p style="color: #ffffff; font-size: 16px; margin: 0; opacity: 0.9; text-align: center;">
-                                            Physiotherapy & Chiropractic Care
+                                            Physiotherapist | Osteopath | Chiropractor
                                         </p>
                                     </td>
                                 </tr>
@@ -729,7 +729,7 @@ exports.verifyEmailOtp = async (req, res, next) => {
                                     Dr. Rajneesh Kant & Team
                                 </p>
                                 <p style="color: #6b7280; font-size: 14px; margin: 0; font-style: italic;">
-                                    Physiotherapy & Chiropractic Care
+                                    Physiotherapist | Osteopath | Chiropractor
                                 </p>
                             </div>
                         </td>
@@ -1808,7 +1808,7 @@ function welcome(user) {
                                         </h1>
                                         
                                         <p style="color: #ffffff; font-size: 16px; margin: 0; opacity: 0.9; text-align: center;">
-                                            Physiotherapy & Chiropractic Care
+                                            Physiotherapist | Osteopath | Chiropractor
                                         </p>
                                     </td>
                                 </tr>
@@ -2011,7 +2011,7 @@ function welcome(user) {
                                     Dr. Rajneesh Kant & Team
                                 </p>
                                 <p style="color: #6b7280; font-size: 14px; margin: 0; font-style: italic;">
-                                    Physiotherapy & Chiropractic Care
+                                    Physiotherapist | Osteopath | Chiropractor
                                 </p>
                             </div>
                         </td>

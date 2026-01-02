@@ -161,7 +161,7 @@ export function Header() {
                                             "text-gray-600 font-medium transition-all duration-300 hidden sm:block",
                                             isScrolled ? "text-xs" : "text-xs md:text-sm"
                                         )}>
-                                            Physiotherapy & Chiropractic Care
+                                            Physiotherapist | Osteopath | Chiropractor
                                         </p>
                                     </div>
                                 </Link>
@@ -185,7 +185,7 @@ export function Header() {
                                                         <DropdownMenuSeparator />
                                                         {item.submenu.map((treatment, index) => (
                                                             <DropdownMenuItem key={index} asChild>
-                                                                <Link href={`/treatments/${treatment?.service_name.toLowerCase().replace(/\s+/g, '-')}`}>
+                                                                <Link href={`/treatments/${treatment?.service_slug}`}>
                                                                     {treatment?.service_name}
                                                                 </Link>
                                                             </DropdownMenuItem>

@@ -7,6 +7,11 @@ const serviceSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
+    service_slug: {
+        type: String,
+        unique: true,
+        trim: true,
+    },
     service_small_desc: {
         type: String,
         trim: true,
@@ -36,6 +41,10 @@ const serviceSchema = new mongoose.Schema({
         trim: true,
         enum: ['Booking Open', 'Booking Close', 'Draft', 'Published'],
         default: 'Draft'
+    },
+    appointment_status: {
+        type: String,
+        trim: true,
     },
     service_session_allowed_limit: {
         type: Number,

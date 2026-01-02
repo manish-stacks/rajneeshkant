@@ -19,7 +19,7 @@ export function Footer() {
                 </div>
                 <div>
                   <h3 className="font-bold text-[#1e7fd0] text-xl">Dr. Rajneesh Kant</h3>
-                  <p className="text-sm text-gray-600">Physiotherapy & Chiropractic Care</p>
+                  <p className="text-sm text-gray-600">Physiotherapist | Osteopath | Chiropractor</p>
                 </div>
               </div>
               <p className="text-gray-600 mb-4">
