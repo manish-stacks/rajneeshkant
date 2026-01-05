@@ -415,9 +415,6 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
                     <span>₹{calculateSavings(selectedSessions).toLocaleString()}</span>
                   </div>
                 </div>
-
-
-
                 {/* CTA */}
                 <a
                   href={`/booking-sessions?sessions=${selectedSessions}&price=${calculateTotalPrice(selectedSessions).toLocaleString().replace(/[^\d.]/g, "")}&service=${slug}`}
@@ -426,14 +423,10 @@ const Treatments: React.FC<{ slug: string }> = ({ slug }) => {
                   <Calendar className="w-5 h-5 mr-2" />
                   Book Appointment
                 </a>
-
-
               </CardContent>
             </Card>
           </div>
-
         </div>
-
 
 
         {/* Service Description */}
