@@ -44,12 +44,12 @@ useEffect(() => {
         blogsRes,
          servicesRes,
       ] = await Promise.all([
-        axios.get("http://localhost:7900/api/v1/get-booking-count", { headers }),
-        axios.get("http://localhost:7900/api/v1/get-clinic-count", { headers }),
-        axios.get("http://localhost:7900/api/v1/get-doctor-count", { headers }),
-        axios.get("http://localhost:7900/api/v1/get-user-count", { headers }),
-        axios.get("http://localhost:7900/api/v1/get-blogs-count", { headers }),
-         axios.get("http://localhost:7900/api/v1/get-service-count", { headers }),
+        axios.get("https://drkm.api.adsdigitalmedia.com/api/v1/get-booking-count", { headers }),
+        axios.get("https://drkm.api.adsdigitalmedia.com/api/v1/get-clinic-count", { headers }),
+        axios.get("https://drkm.api.adsdigitalmedia.com/api/v1/get-doctor-count", { headers }),
+        axios.get("https://drkm.api.adsdigitalmedia.com/api/v1/get-user-count", { headers }),
+        axios.get("https://drkm.api.adsdigitalmedia.com/api/v1/get-blogs-count", { headers }),
+         axios.get("https://drkm.api.adsdigitalmedia.com/api/v1/get-service-count", { headers }),
       ]);
 
       setStatsData({
@@ -130,8 +130,8 @@ const stats = [
       try {
         // Fetch both APIs
         const [serviceRes, bookingRes] = await Promise.all([
-          axios.get("http://localhost:7900/api/v1/get-all-service"),
-          axios.get("http://localhost:7900/api/v1/admin-bookings"),
+          axios.get("https://drkm.api.adsdigitalmedia.com/api/v1/get-all-service"),
+          axios.get("https://drkm.api.adsdigitalmedia.com/api/v1/admin-bookings"),
         ]);
 
         const serviceData = serviceRes.data.data || [];
@@ -211,7 +211,7 @@ useEffect(() => {
       const token = localStorage.getItem("adminToken");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-      const res = await axios.get("http://localhost:7900/api/v1/admin-bookings", { headers });
+      const res = await axios.get("https://drkm.api.adsdigitalmedia.com/api/v1/admin-bookings", { headers });
 
       // Map API data to the structure used in your UI
       const latestAppointments = res.data.data.map((item) => ({
@@ -485,7 +485,7 @@ useEffect(() => {
                   {/* See All Link */}
                   <div className="flex justify-center mt-4">
                     <a
-                      href="http://localhost:5173/dashboard/Sessions"
+                      href="/dashboard/Sessions"
                       className="bg-gray-100 hover:bg-gray-200 text-blue-600 hover:text-blue-800 font-medium text-sm px-4 py-2 rounded-lg transition-colors"
                     >
                       See All

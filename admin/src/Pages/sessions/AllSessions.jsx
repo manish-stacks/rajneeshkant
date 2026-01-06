@@ -207,7 +207,7 @@ const confirmStatusChange = async () => {
   if (!selectedSession) return;
 
   try {
-    const response = await fetch("http://localhost:7900/admin-session-change-status", {
+    const response = await fetch("https://drkm.api.adsdigitalmedia.com/admin-session-change-status", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -257,7 +257,7 @@ const confirmDelete = async () => {
     };
 
     const response = await axios.post(
-      "http://localhost:7900/api/v1/admin-session-delete",
+      "https://drkm.api.adsdigitalmedia.com/api/v1/admin-session-delete",
       payload,
       { headers }
     );

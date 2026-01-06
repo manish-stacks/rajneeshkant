@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { CreditCard, Wallet, Check } from "lucide-react"
+import { CreditCard, Wallet } from "lucide-react"
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
